@@ -27,9 +27,15 @@ echo "Installing Java 7"
 sudo apt-get install openjdk-7-jdk openjdk-7-jre curl -y
 echo "... done installing Java 7"
 
-echo "Adding DSE apt sources"
-echo "deb http://#{credentials['username']}:#{credentials['password']}@debian.datastax.com/enterprise stable main" | \
+
+if grep "@debian.datastax.com/enterprise" /etc/apt/sources.list.d/datastax.sources.list >/dev/null; then
+  echo "DSE apt sources already added"
+else
+  echo "Adding DSE apt sources"
+  echo "deb http://#{credentials['username']}:#{credentials['password']}@debian.datastax.com/enterprise stable main" | \
   sudo tee -a /etc/apt/sources.list.d/datastax.sources.list
+fi
+
 curl -L https://debian.datastax.com/debian/repo_key | sudo apt-key add -
 echo "... done adding DSE apt sources"
 
